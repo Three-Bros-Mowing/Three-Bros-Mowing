@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Three Bros Mowing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-dark: #1a3a1a;
+      --green-mid: #2d6a2d;
+      --green-bright: #4caf50;
+      --green-lime: #a8d840;
+      --yellow: #f5c518;
+      --cream: #f8f4e8;
+      --white: #ffffff;
+      --gray: #6b7280;
+      --dark: #111811;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--dark);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(17,24,17,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--green-mid);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.8rem;
+      color: var(--green-lime);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--yellow); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green-lime); }
+
+    .nav-cta {
+      background: var(--green-lime);
+      color: var(--dark) !important;
+      padding: 0.5rem 1.3rem;
+      border-radius: 4px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--yellow) !important; color: var(--dark) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative;
+      padding: 7rem 2.5rem 3rem;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(135deg, rgba(17,24,17,0.97) 0%, rgba(26,58,26,0.85) 60%, rgba(17,24,17,0.95) 100%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 18px,
+          rgba(76,175,80,0.05) 18px,
+          rgba(76,175,80,0.05) 19px
+        );
+    }
+
+    /* Animated grass blades */
+    .grass-row {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 1;
+      display: flex; align-items: flex-end; gap: 4px;
+      height: 120px; overflow: hidden;
+    }
+
+    .blade {
+      width: 10px;
+      background: linear-gradient(to top, var(--green-dark), var(--green-bright));
+      border-radius: 50% 50% 0 0;
+      transform-origin: bottom center;
+      animation: sway 3s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-6deg); }
+      50%       { transform: rotate(6deg); }
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 750px; }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--green-mid);
+      color: var(--green-lime);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: 4px;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .accent { color: var(--green-lime); }
+    h1 .sub    { color: var(--yellow); display: block; font-size: 60%; letter-spacing: 8px; }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: #b8d4b8;
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--green-lime);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--yellow); transform: translateY(-2px); }
+
+    .btn-outline {
+      border: 2px solid var(--green-mid);
+      color: var(--cream);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--green-lime); color: var(--green-lime); transform: translateY(-2px); }
+
+    .hero-stats {
+      position: relative; z-index: 2;
+      display: flex; gap: 3rem; margin-top: 4rem; flex-wrap: wrap;
+    }
+
+    .stat { text-align: left; }
+    .stat-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 3rem;
+      color: var(--green-lime);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 5rem 2.5rem; }
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--green-lime);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: 3px;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      color: #8aab8a;
+      font-size: 1.05rem;
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: #0e1a0e; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+    }
+
+    .service-card {
+      background: var(--green-dark);
+      border: 1px solid #2d4a2d;
+      border-radius: 8px;
+      padding: 2rem;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--green-bright), var(--green-lime));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .service-card:hover { border-color: var(--green-lime); transform: translateY(-4px); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .service-card p { color: #8aab8a; font-size: 0.95rem; line-height: 1.6; }
+
+    /* ── WHY US ── */
+    #why { background: var(--dark); }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1000px;
+      align-items: center;
+    }
+
+    .why-visual {
+      background: var(--green-dark);
+      border: 1px solid #2d4a2d;
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .big-icon { font-size: 6rem; line-height: 1; margin-bottom: 1rem; }
+
+    .why-visual-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2rem;
+      letter-spacing: 3px;
+      color: var(--green-lime);
+      margin-bottom: 0.5rem;
+    }
+
+    .why-visual p { color: #8aab8a; font-size: 0.95rem; }
+
+    .why-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .why-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.2rem;
+      background: #0e1a0e;
+      border-radius: 8px;
+      border: 1px solid #1e3a1e;
+      transition: border-color 0.2s;
+    }
+    .why-item:hover { border-color: var(--green-mid); }
+
+    .why-check {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      background: var(--green-lime);
+      color: var(--dark);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+    }
+
+    .why-item h4 { color: var(--white); font-weight: 700; margin-bottom: 0.2rem; }
+    .why-item p  { color: #8aab8a; font-size: 0.9rem; line-height: 1.5; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: #0e1a0e; }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+    }
+
+    .testimonial-card {
+      background: var(--green-dark);
+      border: 1px solid #2d4a2d;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+
+    .stars { color: var(--yellow); font-size: 1.1rem; margin-bottom: 1rem; letter-spacing: 2px; }
+
+    .testimonial-card p {
+      color: #b8d4b8;
+      font-size: 0.97rem;
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
+      font-style: italic;
+    }
+
+    .reviewer { font-weight: 700; color: var(--white); font-size: 0.9rem; }
+    .reviewer span { color: var(--gray); font-weight: 400; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--dark); }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1000px;
+      align-items: start;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 1.2rem;
+      background: #0e1a0e;
+      border: 1px solid #1e3a1e;
+      border-radius: 8px;
+    }
+
+    .contact-item-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-item h4 { color: var(--green-lime); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .contact-item p  { color: var(--cream); font-size: 0.97rem; }
+
+    /* Quote Form */
+    .quote-form {
+      background: var(--green-dark);
+      border: 1px solid #2d4a2d;
+      border-radius: 12px;
+      padding: 2.5rem;
+    }
+
+    .quote-form h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; color: #8aab8a; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.4rem; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: #0e1a0e;
+      border: 1px solid #2d4a2d;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      color: var(--cream);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.97rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select,
+    .form-group textarea:focus { border-color: var(--green-lime); }
+    .form-group select { appearance: none; cursor: pointer; }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-group select option { background: #0e1a0e; }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--green-lime);
+      color: var(--dark);
+      border: none;
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem;
+    }
+    .submit-btn:hover { background: var(--yellow); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080e08;
+      border-top: 2px solid var(--green-dark);
+      padding: 2.5rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.6rem;
+      color: var(--green-lime);
+      letter-spacing: 2px;
+    }
+    .footer-logo span { color: var(--yellow); }
+
+    footer p { color: var(--gray); font-size: 0.85rem; }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--green-lime); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      section { padding: 3.5rem 1.2rem; }
+      .why-grid, .contact-wrapper { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-stats { gap: 1.5rem; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Three <span>Bros</span> Mowing</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content fade-in">
+    <div class="hero-badge">🌿 Friend-Owned &amp; Operated</div>
+    <h1>
+      Three Bros
+      <span class="accent">Mowing</span>
+      <span class="sub">Your Lawn. Our Pride.</span>
+    </h1>
+    <p class="hero-desc">
+      Three brothers, one mission — keeping your yard looking its absolute best.
+      Professional lawn care you can count on, every single time.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Get a Free Quote</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+  <div class="hero-stats fade-in">
+    <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Happy Customers</div></div>
+    <div class="stat"><div class="stat-num">5★</div><div class="stat-label">Avg. Rating</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Brothers &amp; Counting</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Satisfaction Guaranteed</div></div>
+  </div>
+  <div class="grass-row" id="grassRow"></div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-tag">What We Do</div>
+  <div class="section-title">Our Services</div>
+  <p class="section-sub">From weekly mowing to full yard cleanups, we handle it all so you don't have to.</p>
+  <div class="services-grid fade-in">
+    <div class="service-card">
+      <div class="service-icon">🌿</div>
+      <h3>Lawn Mowing</h3>
+      <p>Regular mowing on your schedule — weekly, bi-weekly, or as needed. Always neat, always clean lines.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">✂️</div>
+      <h3>Edging &amp; Trimming</h3>
+      <p>Crisp borders along driveways, sidewalks, and flower beds for that polished, professional look.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🍂</div>
+      <h3>Leaf Removal</h3>
+      <p>Fall cleanup made easy. We rake, bag, and haul — leaving your yard clear and ready for winter.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌱</div>
+      <h3>Seasonal Cleanup</h3>
+      <p>Spring and fall yard prep to kickstart the season right, including debris removal and turf tidying.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📋</div>
+      <h3>Custom Packages</h3>
+      <p>Need something specific? We'll build a custom lawn care plan that fits your yard and your budget.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-tag">Why Choose Us</div>
+  <div class="section-title">Brothers Who Care</div>
+  <p class="section-sub">We're not a faceless company. We're three brothers who take pride in every yard we touch.</p>
+  <div class="why-grid fade-in">
+    <div class="why-visual">
+      <div class="big-icon">🤝</div>
+      <div class="why-visual-title">Locally Owned by Friends</div>
+      <p>Built from the ground up by friends who believe hard work and honesty are everything.</p>
+    </div>
+    <ul class="why-list">
+      <li class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Reliable &amp; On Time</h4>
+          <p>We show up when we say we will — no waiting around, no excuses.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Fair, Transparent Pricing</h4>
+          <p>No hidden fees. You'll know the price before we ever touch your lawn.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Quality Equipment</h4>
+          <p>We invest in the right tools so every job comes out looking professional.</p>
+        </div>
+      </li>
+      <li class="why-item">
+        <div class="why-check">✓</div>
+        <div>
+          <h4>Satisfaction Guaranteed</h4>
+          <p>Not happy? We'll come back and make it right — no questions asked.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-tag">What People Say</div>
+  <div class="section-title">Neighbors Love Us</div>
+  <p class="section-sub">Don't take our word for it — here's what our customers have to say.</p>
+  <div class="fade-in" style="background: var(--green-dark); border: 1px solid #2d4a2d; border-radius: 8px; padding: 3rem 2rem; text-align: center; max-width: 500px;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+    <p style="color: #8aab8a; font-size: 1.05rem; line-height: 1.7;">No reviews recorded yet. Be the first to share your experience!</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">Get in Touch</div>
+  <div class="section-title">Get a Free Quote</div>
+  <p class="section-sub">Ready for a lawn you'll love? Reach out and we'll get back to you fast.</p>
+  <div class="contact-wrapper fade-in">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div>
+          <h4>Call or Text</h4>
+          <p>539 - 235 4016</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📧</div>
+        <div>
+          <h4>Email Us</h4>
+          <p>BrysonArroyo14@gmail.com</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <h4>Service Area</h4>
+          <p>Serving the greater local area and surrounding neighborhoods</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕒</div>
+        <div>
+          <h4>Hours</h4>
+          <p>Mon – Sat: 7am – 6pm</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-form">
+      <h3>Request a Quote</h3>
+      <div id="fs-success" style="display:none; background:#1a3a1a; border:1px solid var(--green-lime); border-radius:8px; padding:1.5rem; text-align:center; color:var(--green-lime); font-weight:700; font-size:1.05rem; margin-bottom:1rem;">
+        ✅ Request sent! We'll be in touch soon.
+      </div>
+      <form action="https://formspree.io/f/mlgzzgwz" method="POST" id="quote-form">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="John Smith" required />
+        </div>
+        <div class="form-group">
+          <label for="contact">Phone / Email</label>
+          <input type="text" id="contact" name="contact" placeholder="(555) 000-0000 or email@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="service">Service Needed</label>
+          <select id="service" name="service" required>
+            <option value="">Select a service...</option>
+            <option>Lawn Mowing</option>
+            <option>Edging &amp; Trimming</option>
+            <option>Leaf Removal</option>
+            <option>Seasonal Cleanup</option>
+            <option>Custom Package</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="lot-size">Lot Size (approx.)</label>
+          <select id="lot-size" name="lot_size">
+            <option value="">Select size...</option>
+            <option>Small (&lt; 1/4 acre)</option>
+            <option>Medium (1/4 – 1/2 acre)</option>
+            <option>Large (1/2 – 1 acre)</option>
+            <option>Extra Large (&gt; 1 acre)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message (Optional)</label>
+          <textarea id="message" name="message" placeholder="Any details about your yard or special requests..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submit-btn">Send My Request →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Three <span>Bros</span> Mowing</div>
+  <p>© 2025 Three Bros Mowing. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#why">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Grass blade generator
+  const grassRow = document.getElementById('grassRow');
+  const bladeCount = Math.ceil(window.innerWidth / 12);
+  for (let i = 0; i < bladeCount; i++) {
+    const blade = document.createElement('div');
+    blade.className = 'blade';
+    const h = 40 + Math.random() * 80;
+    blade.style.height = h + 'px';
+    blade.style.animationDelay = (Math.random() * 2) + 's';
+    blade.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+    blade.style.opacity = 0.5 + Math.random() * 0.5;
+    blade.style.width = (8 + Math.random() * 6) + 'px';
+    const g = Math.floor(80 + Math.random() * 80);
+    blade.style.background = `linear-gradient(to top, #1a3a1a, rgb(50,${g},50))`;
+    grassRow.appendChild(blade);
+  }
+
+  // Scroll fade-in
+  const faders = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.15 });
+  faders.forEach(f => observer.observe(f));
+
+  // Formspree AJAX submission
+  const form = document.getElementById('quote-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const successMsg = document.getElementById('fs-success');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled = true;
+
+    const data = new FormData(form);
+    try {
+      const res = await fetch('https://formspree.io/f/mlgzzgwz', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        successMsg.style.display = 'block';
+      } else {
+        submitBtn.textContent = '❌ Something went wrong. Try again.';
+        submitBtn.disabled = false;
+      }
+    } catch {
+      submitBtn.textContent = '❌ Network error. Try again.';
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
